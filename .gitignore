@@ -1,0 +1,22 @@
+
+# Dependencies
+node_modules/
+
+# Production build
+dist/
+
+# Environment variables and secrets
+.env
+.env.local
+.env.*.local
+
+# Logs
+*.log
+npm-debug.log*
+
+# IDE / OS
+.idea/
+.DS_Store
+
+# TypeScript
+*.tsbuildinfo
