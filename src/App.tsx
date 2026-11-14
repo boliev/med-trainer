@@ -26,6 +26,13 @@ function Home() {
     <div className="home-footer"><Stethoscope size={18}/> Создано для спокойной, последовательной подготовки к занятиям</div>
   </div>;
 }
+function pluralRu(value: number, one: string, few: string, many: string) {
+  const n = Math.abs(value);
+  if (n % 100 >= 11 && n % 100 <= 14) return many;
+  if (n % 10 === 1) return one;
+  if (n % 10 >= 2 && n % 10 <= 4) return few;
+  return many;
+}
 function stepCount(c: Checklist) { return c.parts.reduce((n,p)=>n+p.items.length,0); }
 function summary(c: Checklist, study: StudyState) {
   const ratings=study.progress[c.id]?.ratings??{};
@@ -49,7 +56,7 @@ function ChecklistList({actions}:{actions:StudyActions}){
   const fav=filtered.filter(c=>actions.study.favorites.includes(c.id));
   const rest=filtered.filter(c=>!actions.study.favorites.includes(c.id));
   return <div className="layout page"><Link to="/" className="back-link"><ArrowLeft size={16}/> На главную</Link>
-    <div className="page-heading"><div><div className="eyebrow"><GraduationCap size={16}/> Учебный тренажёр</div><h1>Чек-листы</h1><p>Вспоминай действия по порядку. Не обязательно слово в слово — главное, ничего не упустить.</p></div><span className="count-pill">{checklists.length} алгоритма</span></div>
+    <div className="page-heading"><div><div className="eyebrow"><GraduationCap size={16}/> Учебный тренажёр</div><h1>Чек-листы</h1><p>Вспоминай действия по порядку. Не обязательно слово в слово — главное, ничего не упустить.</p></div><span className="count-pill">{checklists.length} {pluralRu(checklists.length, 'алгоритм', 'алгоритма', 'алгоритмов')}</span></div>
     <div className="search-field"><Search size={19}/><input type="search" value={query} onChange={e=>setQuery(e.target.value)} placeholder="Найти чек-лист…" aria-label="Поиск чек-листа"/>{query&&<button onClick={()=>setQuery('')} aria-label="Очистить поиск"><X size={17}/></button>}</div>
     {loadErrors.length>0&&<div className="error-box">Ошибки загрузки JSON: {loadErrors.join('; ')}</div>}
     {fav.length>0&&<section className="list-section"><div className="section-heading"><Star size={16} fill="currentColor"/><h2>Избранное</h2><span>{fav.length}</span></div><div className="checks">{fav.map(c=><ListCard key={c.id} c={c} study={actions.study} toggleFavorite={actions.toggleFavorite}/>)}</div></section>}
@@ -95,7 +102,7 @@ function Practice({c,actions}:{c:Checklist;actions:StudyActions}){
   const problem=Object.values(sessionRatings).filter(r=>r!=='good').length;
   useEffect(()=>{window.scrollTo({top:0,behavior:'smooth'});},[done,mode]);
   return <div className="layout page practice-page"><button className="back-link back-button" onClick={goBack}><ArrowLeft size={16}/> Все чек-листы</button>
-    <div className="practice-heading"><div><div className="eyebrow"><ClipboardCheck size={16}/> Тренировка алгоритма</div><h1>{c.name}</h1><p>{steps.length} пунктов · {c.parts.length} этапа</p></div><button type="button" className={`favorite-large ${favorite?'selected':''}`} onClick={()=>actions.toggleFavorite(c.id)} title={favorite?'Убрать из избранного':'В избранное'}><Star size={19} fill={favorite?'currentColor':'none'}/><span>{favorite?'В избранном':'В избранное'}</span></button></div>
+    <div className="practice-heading"><div><div className="eyebrow"><ClipboardCheck size={16}/> Тренировка алгоритма</div><h1>{c.name}</h1><p>{steps.length} пунктов · {c.parts.length} {pluralRu(c.parts.length, 'этап', 'этапа', 'этапов')}</p></div><button type="button" className={`favorite-large ${favorite?'selected':''}`} onClick={()=>actions.toggleFavorite(c.id)} title={favorite?'Убрать из избранного':'В избранное'}><Star size={19} fill={favorite?'currentColor':'none'}/><span>{favorite?'В избранном':'В избранное'}</span></button></div>
     <div className="mode-tabs" role="group" aria-label="Режим тренировки"><button className={mode==='learn'?'active':''} onClick={()=>reset('learn')}><Brain size={17}/> Обучение</button><button className={mode==='review'?'active':''} onClick={()=>reset('review')}><RotateCcw size={17}/> Ошибки{weakSteps.length>0&&<span className="tab-count">{weakSteps.length}</span>}</button><button className={mode==='exam'?'active':''} onClick={()=>reset('exam')}><GraduationCap size={18}/> Экзамен</button></div>
     {done?<div className="study-card completed"><div className="finished-icon"><CheckCircle2 size={34}/></div><h2>{mode==='exam'?'Экзамен завершён':'Тренировка завершена!'}</h2><p>{mode==='exam'?`Отмечено пропусков: ${examMisses.length} из ${steps.length}.`:`Полностью вспомнила: ${score} · Нужно повторить: ${problem}`}</p><div className="finish-actions"><button className="btn primary" onClick={()=>reset(mode)}><RotateCcw size={17}/> Пройти ещё раз</button>{mode!=='exam'&&problem>0&&<button className="btn outline" onClick={()=>reset('review')}>Повторить сложное</button>}<button className="btn subtle" onClick={goBack}>К списку <ArrowRight size={17}/></button></div></div>:
       mode==='exam'?<div className="study-card exam-card"><div className="study-card-header"><span className="stage-tag"><GraduationCap size={16}/> Самопроверка</span><span className="step-number">{steps.length} пунктов</span></div>
