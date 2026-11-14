@@ -21,7 +21,7 @@ function Home() {
     <p className="hero-description">Место, где сложные медицинские алгоритмы становятся понятнее. Повторяй в своём темпе, проверяй себя и замечай прогресс.</p>
     <div className="home-grid">
       <Link to="/check" className="module-card module-active"><div className="module-icon"><ListChecks size={25}/></div><div className="module-body"><span className="module-kicker">Тренажёр № 01</span><h2>Чек-листы</h2><p>Учи последовательность действий, вспоминай по памяти и повторяй сложное.</p><span className="module-link">Открыть тренажёр <ArrowRight size={17}/></span></div><div className="module-corner"><ChevronRight size={21}/></div></Link>
-      <Link to="/documents" className="module-card module-active"><div className="module-icon soft"><BookOpen size={25}/></div><div className="module-body"><span className="module-kicker">Справочник и тренажёр № 02</span><h2>Нормативные документы</h2><p>Запоминай номера приказов и понимай, что регулирует каждый документ.</p><span className="module-link">Открыть справочник <ArrowRight size={17}/></span></div></Link>
+      <Link to="/documents" className="module-card module-active"><div className="module-icon"><BookOpen size={25}/></div><div className="module-body"><span className="module-kicker">Справочник и тренажёр № 02</span><h2>Нормативные документы</h2><p>Запоминай номера приказов и понимай, что регулирует каждый документ.</p><span className="module-link">Открыть справочник <ArrowRight size={17}/></span></div></Link>
     </div>
     <div className="home-footer"><Stethoscope size={18}/> Создано для спокойной, последовательной подготовки к занятиям</div>
   </div>;
