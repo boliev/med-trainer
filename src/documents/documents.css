@@ -7,3 +7,25 @@
 .doc-choices button.muted,.doc-choices button.muted:disabled{background:#f7f8f7;border-color:#e8ece9;color:#8b9b91}
 .doc-answer.doc-answer-incorrect{background:#fff0ee;border-color:#efb1ab;color:#943a32}
 .doc-answer.doc-answer-correct{background:#e5f6e9;border-color:#8dd0a4;color:#23663e}
+
+/* Consistent custom select arrow and right spacing */
+.doc-filter,.doc-train-settings select{
+  appearance:none;
+  -webkit-appearance:none;
+  background-color:#fff;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='18' height='18' viewBox='0 0 24 24' fill='none' stroke='%233d6955' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+  background-repeat:no-repeat;
+  background-position:right 15px center;
+  background-size:18px 18px;
+  padding-right:48px;
+}
+.doc-filter{width:100%;max-width:440px;}
+.doc-train-settings select{min-height:44px;}
+.doc-glossary{background:#fff;border:1px solid #e3ebe5;border-radius:16px;padding:22px 24px;margin:28px 0 18px}
+.doc-glossary h2{font-size:17px;margin:0 0 18px;color:#39594b}
+.doc-glossary dl{display:grid;gap:12px;margin:0}
+.doc-glossary dl>div{display:grid;grid-template-columns:125px minmax(0,1fr);gap:12px;padding-bottom:12px;border-bottom:1px solid #edf1ed}
+.doc-glossary dt{font-weight:800;color:#377e60;font-size:13px}
+.doc-glossary dd{margin:0;color:#647c6d;font-size:12px;line-height:1.7}
+.doc-glossary p{font-size:11px;color:#829688;line-height:1.8;margin:15px 0 0}
+@media(max-width:600px){.doc-glossary dl>div{grid-template-columns:1fr;gap:4px}.doc-glossary{padding:18px}}
