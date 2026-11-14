@@ -55,6 +55,13 @@ function useDocumentStore() {
     }))
   };
 }
+function pluralRu(value: number, one: string, few: string, many: string) {
+  const n = Math.abs(value);
+  if (n % 100 >= 11 && n % 100 <= 14) return many;
+  if (n % 10 === 1) return one;
+  if (n % 10 >= 2 && n % 10 <= 4) return few;
+  return many;
+}
 function niceCategory(id: string) { return categories.find(x => x.id === id)?.title || id; }
 function Stars({ selected, onClick }: { selected: boolean; onClick: () => void }) {
   return <button type="button" className={'doc-star ' + (selected ? 'selected' : '')} onClick={onClick} aria-label={selected ? 'Убрать из избранного' : 'В избранное'} aria-pressed={selected}><Star size={19} fill={selected ? 'currentColor' : 'none'}/></button>;
@@ -81,7 +88,7 @@ export function DocumentsHome() {
   }
   return <div className="layout page documents-page">
     <Link to="/" className="back-link"><ArrowLeft size={16}/> На главную</Link>
-    <div className="doc-intro"><div><div className="eyebrow"><BookOpen size={16}/> Материалы для 1 курса</div><h1>Нормативные документы</h1><p>Изучай номера, названия и смысл документов. Отмечай важное и тренируй память.</p></div><span className="count-pill">{nursingDocuments.length} документа</span></div>
+    <div className="doc-intro"><div><div className="eyebrow"><BookOpen size={16}/> Материалы для 1 курса</div><h1>Нормативные документы</h1><p>Изучай номера, названия и смысл документов. Отмечай важное и тренируй память.</p></div><span className="count-pill">{nursingDocuments.length} {pluralRu(nursingDocuments.length, 'документ', 'документа', 'документов')}</span></div>
     <Notice/>
     <div className="doc-feature"><div><h2>Повторение на сегодня</h2><p>Вспоминай номера и содержание самостоятельно. Сложные вопросы возвращаются чаще.</p></div><Link className="btn primary" to="/documents/train?mode=cards">Начать <ArrowRight size={17}/></Link></div>
     <div className="doc-modes">
@@ -94,6 +101,16 @@ export function DocumentsHome() {
     <select className="doc-filter" aria-label="Раздел справочника" value={filter} onChange={e => setFilter(e.target.value)}><option value="all">Все разделы</option>{categories.map(c=><option key={c.id} value={c.id}>{c.title}</option>)}</select>
     {fav.length > 0 && <section className="doc-section"><h2><Star size={16} fill="currentColor"/> Избранное · {fav.length}</h2>{renderList(fav)}</section>}
     <section className={'doc-section ' + (fav.length ? 'doc-separated' : '')}><h2>{fav.length ? 'Остальные документы' : 'Все документы'} · {other.length}</h2>{renderList(other)}{filtered.length === 0 && <p>Ничего не найдено. Попробуй другой запрос.</p>}</section>
+    <section className="doc-glossary" aria-labelledby="doc-glossary-heading">
+      <h2 id="doc-glossary-heading">Сокращения в документах</h2>
+      <dl>
+        <div><dt>НП «НАСКИ»</dt><dd>Некоммерческое партнёрство «Национальная ассоциация специалистов по контролю инфекций, связанных с оказанием медицинской помощи».</dd></div>
+        <div><dt>МР</dt><dd>Методические рекомендации.</dd></div>
+        <div><dt>МУ</dt><dd>Методические указания.</dd></div>
+        <div><dt>СП</dt><dd>Санитарные правила.</dd></div>
+      </dl>
+      <p>Рекомендации НП «НАСКИ» не равнозначны обязательным государственным нормативным актам.</p>
+    </section>
     <p className="doc-small">Документы и учебные вопросы хранятся в отдельных JSON-файлах, не в компонентах React.</p>
   </div>;
 }
