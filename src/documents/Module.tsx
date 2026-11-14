@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
-import { ArrowLeft, ArrowRight, BookOpen, Check, ChevronRight, ClipboardList, GraduationCap, Heart, RotateCcw, Search, Shuffle, Star } from 'lucide-react';
+import { ArrowLeft, ArrowRight, BookOpen, Check, ChevronRight, ClipboardList, GraduationCap, Heart, RotateCcw, Search, Star } from 'lucide-react';
 import './documents.css';
 
 export type DocumentEntry = {
@@ -28,7 +28,6 @@ import infectionsNav from '../../documents/data/sanpin-infections-nav.json';
 import wasteNav from '../../documents/data/sanpin-waste-nav.json';
 import formNav from '../../documents/data/form-058-comparison.json';
 import obsoleteNav from '../../documents/data/obsolete-documents.json';
-import manifest from '../../documents/manifest.json';
 
 const navs = [infectionsNav, wasteNav, formNav, obsoleteNav];
 const storageKey = 'nursing-documents-progress-v1';
@@ -103,7 +102,7 @@ export function DocumentDetail() {
   const { state, toggleFavorite } = useDocumentStore();
   const d = nursingDocuments.find(x => x.id === id);
   if (!d) return <div className="layout page"><h1>Документ не найден</h1><Link to="/documents">К справочнику</Link></div>;
-  const related = navs.filter(x => 'relatedDocumentId' in x && x.relatedDocumentId === d.id);
+  const related = navs.filter(n => (n.id === 'sanpin-infections-nav' && d.id === 'doc-09') || (n.id === 'sanpin-waste-nav' && d.id === 'doc-11') || (n.id === 'form-058-comparison' && (d.id === 'doc-26' || d.id === 'doc-27')));
   return <div className="layout page documents-page"><Link to="/documents" className="back-link"><ArrowLeft size={16}/> К документам</Link>
     <div className="doc-detail-title"><div><div className="eyebrow">{niceCategory(d.categoryId)}</div><h1>{d.displayCode}</h1><h2>{d.heading}</h2></div><Stars selected={state.favorites.includes(d.id)} onClick={()=>toggleFavorite(d.id)}/></div>
     <Notice/><div className="doc-detail-card"><p><strong>Что регулирует</strong></p><p>{d.summary}</p><h3>Основные положения</h3><ul>{d.keyPoints.map((p,i)=><li key={i}>{p}</li>)}</ul>
@@ -176,7 +175,7 @@ export function DocumentsTrain() {
       {mode==='quiz'&&current.choices&&!selected?<div className="doc-choices">{current.choices.map(v=><button key={v} onClick={()=>choose(v)}>{v}</button>)}</div>:null}
       {revealed&&<div className="doc-answer"><strong>{mode==='quiz' ? (same(selected,current.answer)?'Правильно!':'Правильный ответ') : 'Эталонный ответ'}</strong><p>{current.answer}</p>{mode==='quiz'&&selected&&!same(selected,current.answer)&&<p>Твой выбор: {selected}</p>}</div>}
       {!revealed&&mode!=='quiz'&&<button className="btn primary" onClick={()=>setRevealed(true)}>Показать ответ <ArrowRight size={16}/></button>}
-      {revealed&&<div className="doc-rating"><span>Насколько хорошо получилось?</span><button onClick={()=>answer(mode==='quiz'?(same(selected,current.answer)?'good':'miss'):'miss')}>Забыла</button>{mode!=='quiz'&&<button onClick={()=>answer('partial')}>Частично</button>}<button onClick={()=>answer(mode==='quiz'?(same(selected,current.answer)?'good':'miss'):'good')}><Check size={15}/> {mode==='quiz'?'Далее':'Вспомнила'}</button></div>}
+      {revealed&&<div className="doc-rating"><span>{mode==='quiz' ? 'Ответ проверен' : 'Насколько хорошо получилось?'}</span>{mode!=='quiz'&&<><button onClick={()=>answer('miss')}>Забыла</button><button onClick={()=>answer('partial')}>Частично</button></>}<button onClick={()=>answer(mode==='quiz'?(same(selected,current.answer)?'good':'miss'):'good')}><Check size={15}/> {mode==='quiz'?'Далее':'Вспомнила'}</button></div>}
     </div>}
     <Notice/>
   </div>;
